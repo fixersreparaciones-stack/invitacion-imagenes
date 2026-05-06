@@ -952,7 +952,7 @@
   <div class="ornament reveal reveal-delay-3">
     <div class="ornament-diamond"></div>
   </div>
-  <span class="reveal reveal-delay-4" style="display:block;margin-top:24px;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.45em;color:rgba(255,255,255,0.3);text-transform:uppercase;">29 · Agosto · 2026</span>
+  <span class="reveal reveal-delay-4" style="display:block;margin-top:24px;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.45em;color:rgba(230,201,122,0.7);text-transform:uppercase;">29 · Agosto · 2026</span>
 </section>
 
 <style>
@@ -1004,7 +1004,7 @@
 
     <p class="final-waiting reveal reveal-delay-1">¡Te esperamos!</p>
     <p class="final-fifty reveal reveal-delay-2">50 años de amor · 29 de agosto</p>
-    <p class="final-footer-sub reveal reveal-delay-3" style="position:relative;z-index:2;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.4em;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-top:8px;">1976 · 2026</p>
+    <p class="final-footer-sub reveal reveal-delay-3" style="position:relative;z-index:2;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.4em;color:rgba(230,201,122,0.75);text-transform:uppercase;margin-top:8px;">1976 · 2026</p>
 
     <div class="ornament reveal reveal-delay-3" style="margin: 0 auto 40px; max-width: 200px;">
       <div class="ornament-diamond"></div>
@@ -1085,6 +1085,9 @@
 
     const ctx = canvas.getContext('2d');
     let W, H, particles = [];
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    // Reduce count on mobile for better performance
+    const actualCount = isMobile ? Math.floor(count * 0.5) : count;
 
     const COLORS = [
       'rgba(230,201,122,OP)', 'rgba(201,168,76,OP)',
@@ -1101,18 +1104,21 @@
     function spawnParticle() {
       const col = COLORS[Math.floor(Math.random() * COLORS.length)]
                       .replace('OP', (rand(0.3, 0.85) * opacity).toFixed(2));
+      // Lower velocity on mobile so they don't jump around during scroll
+      const velScale = isMobile ? 0.4 : 1;
       return {
         x: rand(0, W), y: rand(0, H),
         r: rand(0.6, 1.8),
-        vx: rand(-0.12, 0.12), vy: rand(-0.25, -0.05),
-        alpha: rand(0, 1), alphaDir: rand(0.003, 0.009),
+        vx: rand(-0.12, 0.12) * velScale,
+        vy: rand(-0.25, -0.05) * velScale,
+        alpha: rand(0, 1), alphaDir: rand(0.003, 0.007),
         col, life: rand(0.4, 1)
       };
     }
 
     function init() {
       resize();
-      particles = Array.from({length: count}, spawnParticle);
+      particles = Array.from({length: actualCount}, spawnParticle);
     }
 
     function tick() {
@@ -1133,7 +1139,19 @@
 
     init();
     tick();
-    window.addEventListener('resize', () => { resize(); init(); });
+
+    // Throttled resize: only resize canvas, don't respawn all particles (avoids the "crazy jump" on mobile scroll)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize();
+        // Only respawn particles that are now out of bounds, not all of them
+        particles.forEach((p, i) => {
+          if (p.x > W || p.y > H) particles[i] = spawnParticle();
+        });
+      }, 200);
+    });
   }
 
   // Apply gold dust to hero and final sections
