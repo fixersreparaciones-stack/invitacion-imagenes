@@ -254,7 +254,7 @@
     font-weight: 200;
     font-size: 10px;
     letter-spacing: 0.4em;
-    color: var(--gold);
+    color: var(--gold-deep);
     text-transform: uppercase;
     text-align: center;
     margin-top: 20px;
@@ -311,11 +311,21 @@
      SECTION 2: LOVE STORY
   ══════════════════════════════ */
   #love-story {
-    background: var(--cream);
+    background: #f5ede0;
     padding: 100px 28px 90px;
     text-align: center;
     position: relative;
     overflow: hidden;
+  }
+
+  #love-story::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(201,168,76,0.09) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.07) 0%, transparent 55%);
+    pointer-events: none;
   }
 
   #love-story::before {
@@ -356,7 +366,7 @@
     margin: 0 auto;
     font-family: 'EB Garamond', serif;
     font-size: clamp(16px, 4vw, 19px);
-    color: var(--text-muted);
+    color: var(--text-body);
     line-height: 1.9;
   }
 
@@ -366,7 +376,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(80px, 22vw, 160px);
     font-weight: 300;
-    color: var(--beige);
+    color: rgba(201,168,76,0.13);
     line-height: 1;
     margin: 48px auto 16px;
     letter-spacing: -0.02em;
@@ -378,7 +388,7 @@
     font-weight: 200;
     font-size: 11px;
     letter-spacing: 0.5em;
-    color: var(--gold);
+    color: var(--gold-deep);
     text-transform: uppercase;
   }
 
@@ -803,7 +813,9 @@
   <span class="section-label reveal" style="color: rgba(201,168,76,0.7);">La celebración</span>
 
   <h2 class="details-heading reveal reveal-delay-1">
-    Nos reunimos<br>a celebrar
+    <span style="display:block;font-family:'Jost',sans-serif;font-weight:200;font-size:clamp(9px,2vw,11px);letter-spacing:0.55em;color:rgba(201,168,76,0.65);text-transform:uppercase;margin-bottom:18px;font-style:normal;">Con toda el alma</span>
+    <span style="display:block;font-style:italic;">Nos reunimos</span>
+    <span style="display:block;font-style:normal;font-weight:400;font-size:clamp(18px,4.5vw,30px);letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-top:10px;">a celebrar</span>
   </h2>
 
   <div class="details-grid reveal reveal-delay-2">
@@ -842,8 +854,10 @@
 <!-- ════════════════════ EVENT INFO ════════════════════ -->
 <section id="event-info">
   <span class="section-label reveal">Detalles del evento</span>
-  <h2 class="reveal reveal-delay-1" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(28px,7vw,44px); color:var(--warm-dark); line-height:1.3;">
-    Todo lo que<br>necesitas saber
+  <h2 class="reveal reveal-delay-1" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(28px,7vw,44px);color:var(--warm-dark);line-height:1.2;text-align:center;">
+    <span style="display:block;font-family:'Jost',sans-serif;font-weight:200;font-size:clamp(9px,2vw,11px);letter-spacing:0.55em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:18px;">Antes de llegar</span>
+    <span style="display:block;font-style:italic;">Todo lo que</span>
+    <span style="display:block;font-style:normal;font-weight:400;font-size:clamp(16px,4vw,26px);letter-spacing:0.24em;text-transform:uppercase;color:var(--gold-deep);margin-top:10px;">necesitas saber</span>
   </h2>
 
   <div class="info-cards">
@@ -863,9 +877,9 @@
 </section>
 
 <!-- ════════════════════ COUNTDOWN ════════════════════ -->
-<section id="countdown" style="background:var(--cream);padding:80px 28px;text-align:center;position:relative;overflow:hidden;">
-  <span class="section-label reveal">Faltan</span>
-  <h2 class="reveal reveal-delay-1" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(26px,7vw,40px);color:var(--warm-dark);line-height:1.3;margin-bottom:52px;">
+<section id="countdown" style="background:var(--warm-dark);padding:80px 28px;text-align:center;position:relative;overflow:hidden;">
+  <span class="section-label reveal" style="color:var(--gold-light);">Faltan</span>
+  <h2 class="reveal reveal-delay-1" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(26px,7vw,40px);color:#fff;line-height:1.3;margin-bottom:52px;">
     para el gran día
   </h2>
 
@@ -902,7 +916,7 @@
   <div class="ornament reveal reveal-delay-3">
     <div class="ornament-diamond"></div>
   </div>
-  <span class="reveal reveal-delay-4" style="display:block;margin-top:24px;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.45em;color:var(--text-muted);text-transform:uppercase;">29 · Agosto · 2026</span>
+  <span class="reveal reveal-delay-4" style="display:block;margin-top:24px;font-family:'Jost',sans-serif;font-weight:200;font-size:10px;letter-spacing:0.45em;color:rgba(255,255,255,0.3);text-transform:uppercase;">29 · Agosto · 2026</span>
 </section>
 
 <style>
@@ -916,7 +930,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
     font-size: clamp(48px, 13vw, 90px);
-    color: var(--warm-dark);
+    color: #fff;
     line-height: 1;
     letter-spacing: -0.02em;
     min-width: 2ch;
@@ -928,13 +942,13 @@
     font-weight: 200;
     font-size: 9px;
     letter-spacing: 0.45em;
-    color: var(--gold);
+    color: var(--gold-light);
     text-transform: uppercase;
   }
   .cd-sep {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(32px, 8vw, 60px);
-    color: var(--champagne);
+    color: rgba(201,168,76,0.3);
     line-height: 1;
     margin-top: 4px;
     user-select: none;
