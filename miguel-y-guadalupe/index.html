@@ -1071,6 +1071,127 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
+  // ═══════════════════════════════════
+  // GOLD DUST PARTICLES
+  // ═══════════════════════════════════
+  function createParticleCanvas(targetEl, count, opacity) {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = `
+      position:absolute;inset:0;width:100%;height:100%;
+      pointer-events:none;z-index:1;
+    `;
+    targetEl.style.position = 'relative';
+    targetEl.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    const COLORS = [
+      'rgba(230,201,122,OP)', 'rgba(201,168,76,OP)',
+      'rgba(255,235,160,OP)', 'rgba(180,140,60,OP)'
+    ];
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function spawnParticle() {
+      const col = COLORS[Math.floor(Math.random() * COLORS.length)]
+                      .replace('OP', (rand(0.3, 0.85) * opacity).toFixed(2));
+      return {
+        x: rand(0, W), y: rand(0, H),
+        r: rand(0.6, 1.8),
+        vx: rand(-0.12, 0.12), vy: rand(-0.25, -0.05),
+        alpha: rand(0, 1), alphaDir: rand(0.003, 0.009),
+        col, life: rand(0.4, 1)
+      };
+    }
+
+    function init() {
+      resize();
+      particles = Array.from({length: count}, spawnParticle);
+    }
+
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach((p, i) => {
+        p.x  += p.vx; p.y += p.vy;
+        p.alpha += p.alphaDir;
+        if (p.alpha >= 1 || p.alpha <= 0) p.alphaDir *= -1;
+        if (p.y < -4 || p.x < -4 || p.x > W + 4) particles[i] = spawnParticle();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.col.replace(/[\d.]+\)$/, (p.alpha * p.life).toFixed(2) + ')');
+        ctx.fill();
+      });
+      requestAnimationFrame(tick);
+    }
+
+    init();
+    tick();
+    window.addEventListener('resize', () => { resize(); init(); });
+  }
+
+  // Apply gold dust to hero and final sections
+  createParticleCanvas(document.getElementById('hero'),   90, 0.55);
+  createParticleCanvas(document.getElementById('final'),  60, 0.45);
+  createParticleCanvas(document.getElementById('countdown'), 40, 0.35);
+
+  // ═══════════════════════════════════
+  // SHIMMER ON HERO TITLE
+  // ═══════════════════════════════════
+  const shimmerStyle = document.createElement('style');
+  shimmerStyle.textContent = `
+    @keyframes shimmer {
+      0%   { background-position: -400% center; }
+      100% { background-position: 400% center; }
+    }
+    .hero-title {
+      background: linear-gradient(
+        105deg,
+        #fff 35%, #e6c97a 48%, #fff 55%,
+        #fff 100%
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 1.6s 0.7s cubic-bezier(.22,.61,.36,1) forwards,
+                 shimmer 6s 2.5s ease-in-out infinite;
+    }
+    @keyframes ornamentGlow {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 1; box-shadow: 0 0 8px rgba(201,168,76,0.6); }
+    }
+    .ornament-diamond {
+      animation: ornamentGlow 3s ease-in-out infinite;
+    }
+    @keyframes goldLinePulse {
+      0%, 100% { opacity: 0.25; }
+      50%       { opacity: 0.8; }
+    }
+    .hero-line {
+      animation: fadeUp 1.4s 1.3s cubic-bezier(.22,.61,.36,1) forwards,
+                 goldLinePulse 3s 2s ease-in-out infinite;
+    }
+    @keyframes finalNamesGlow {
+      0%, 100% { text-shadow: none; }
+      50%       { text-shadow: 0 0 28px rgba(201,168,76,0.35); }
+    }
+    .final-names { animation: finalNamesGlow 4s 1s ease-in-out infinite; }
+
+    @keyframes cdPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.75; }
+    }
+    #cd-seconds { animation: cdPulse 1s step-end infinite; }
+  `;
+  document.head.appendChild(shimmerStyle);
+
 </script>
 </body>
 </html>
